@@ -1,0 +1,41 @@
+.hidden {
+    visibility: hidden;
+}
+
+.city_button {
+    width:100%;
+    padding:10px;
+    border:solid;
+    border-radius: 5px;
+    margin-top:5px;
+}
+
+#search_error_message {
+    color: red;
+}
+
+.current_date {
+    font-size: 70%;
+    font-weight: 300;
+}
+
+.icon {
+    height: 40px;
+    width: 40px;
+}
+
+.city_UV {
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+#weather_display {
+    padding-bottom:10px;
+}
+
+#weather_display p {
+    margin:0;
+}
