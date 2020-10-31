@@ -46,7 +46,7 @@ $(document).ready(function(){
     function getUVIndex(cityWeather){
         let lat = cityWeather.coord.lat;
         let lon = cityWeather.coord.lon;
-        queryURL = "http://api.openweathermap.org/data/2.5/uvi?lat="+lat+"&lon="+lon+"&appid="+API_key;
+        queryURL = "https://api.openweathermap.org/data/2.5/uvi?lat="+lat+"&lon="+lon+"&appid="+API_key;
         $.ajax({
             url: queryURL,
             method: "GET"
