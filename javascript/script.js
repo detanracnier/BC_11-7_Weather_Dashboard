@@ -36,7 +36,6 @@ $(document).ready(function(){
             showCitySearchError();
         })
         .then(function(response) {
-            console.log(response);
             displayContainer.removeClass("hidden");
             getUVIndex(response);
             updateWeatherDisplay(response);
@@ -61,7 +60,6 @@ $(document).ready(function(){
     }
 
     function updateWeatherUV(uvIndex){
-        console
         let uvEL = $(".city_UV");
         uvEL.text(uvIndex);
         if (uvIndex < 2.1){
@@ -104,7 +102,6 @@ $(document).ready(function(){
     }
 
     function updateForcastDisplay(cityForcast){
-        console.log(cityForcast);
         let forcastDisplay = $("#5_day_forcast_container");
         forcastDisplay.empty();
         $.each(cityForcast.list,function(index,forcast){
