@@ -102,13 +102,17 @@ $(document).ready(function(){
     }
 
     function updateForcastDisplay(cityForcast){
+        console.log(cityForcast);
         let forcastDisplay = $("#5_day_forcast_container");
         forcastDisplay.empty();
+        let increment = 0;
         $.each(cityForcast.list,function(index,forcast){
             let forcastContainerEl = $("<div class=\"card m-auto p-2 bg-primary text-white\">");
             let dateEL = $("<div class=\"font-weight-bold\">");
             let date = forcast.dt_txt.split(" ");
-            dateEL.text(date[0]);
+            date = date[0].split("-");
+            date[2] = parseInt(date[2])+ increment;
+            dateEL.text(formatDate(date));
             let iconEl = $("<img class=\"icon\">");
             let iconSrc = "./images/icons/"+forcast.weather[0].icon+".png";
             iconEl.attr("src",iconSrc);
@@ -118,7 +122,15 @@ $(document).ready(function(){
             humidityEl.text("Humidity: "+forcast.main.humidity+"%");
             forcastContainerEl.append(dateEL,iconEl,tempEL,humidityEl);
             forcastDisplay.append(forcastContainerEl);
+            increment++;
         });
+    }
+    function formatDate(date){
+        if(parseInt(date[2]) < 10){
+            date[2] = "0"+date[2];
+        };
+        let formatedDate = date[0] + "-" + date[1] + "-" + date[2];
+        return formatedDate;
     }
 
     function addRecentSearch(city){
