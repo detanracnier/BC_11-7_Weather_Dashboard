@@ -12,4 +12,4 @@ A weather dashboard that will run in the browser and feature dynamically updated
 ## Deployed sight
 [here](https://detanracnier.github.io/BC_11-7_Weather_Dashboard/)
 
-![screenshot of deployed web page](./images/Screenshot1.jpg)
+![screenshot of deployed web page](./images/screenshot1.jpg)
