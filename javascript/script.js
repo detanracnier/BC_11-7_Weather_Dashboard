@@ -20,9 +20,13 @@ $(document).ready(function(){
         if(city!=""){
             addRecentSearch(city);
             getWeather(city);
-            getForcast(city);
         }
     })
+
+    if(recentCitySearches.length != 0){
+        updateRecentSearch();
+        getWeather(recentCitySearches[0]);
+    }
 
 
     function getWeather(city){
@@ -38,6 +42,7 @@ $(document).ready(function(){
         .then(function(response) {
             displayContainer.removeClass("hidden");
             getUVIndex(response);
+            getForcast(response);
             updateWeatherDisplay(response);
         });
     }
@@ -87,8 +92,10 @@ $(document).ready(function(){
         $(".city_wind_speed").text(cityWeather.wind.speed);
     }
 
-    function getForcast(city){
-        let queryURL = "https://api.openweathermap.org/data/2.5/forecast?units=imperial&q="+city+"&cnt=5&appid="+API_key;
+    function getForcast(response){
+        let lat = response.coord.lat;
+        let lon = response.coord.lon;
+        let queryURL = "https://api.openweathermap.org/data/2.5/onecall?exclude=minutely,hourly&units=imperial&lat="+lat+"&lon="+lon+"&appid="+API_key;
         $.ajax({
             url: queryURL,
             method: "GET"
@@ -102,35 +109,27 @@ $(document).ready(function(){
     }
 
     function updateForcastDisplay(cityForcast){
-        console.log(cityForcast);
         let forcastDisplay = $("#5_day_forcast_container");
         forcastDisplay.empty();
-        let increment = 0;
-        $.each(cityForcast.list,function(index,forcast){
+        let fiveDayForcast = cityForcast.daily.slice(0,5);
+        let date = new Date(fiveDayForcast[0].dt*1000);
+
+        $.each(fiveDayForcast,function(index,forcast){
             let forcastContainerEl = $("<div class=\"card m-auto p-2 bg-primary text-white\">");
             let dateEL = $("<div class=\"font-weight-bold\">");
-            let date = forcast.dt_txt.split(" ");
-            date = date[0].split("-");
-            date[2] = parseInt(date[2])+ increment;
-            dateEL.text(formatDate(date));
+            let date = new Date(forcast.dt*1000);
+
+            dateEL.text(date.getUTCMonth()+"-"+date.getUTCDate()+"-"+date.getUTCFullYear());
             let iconEl = $("<img class=\"icon\">");
             let iconSrc = "./images/icons/"+forcast.weather[0].icon+".png";
             iconEl.attr("src",iconSrc);
             let tempEL = $("<div class=\"mb-2\">");
-            tempEL.text("Temp: "+forcast.main.temp+"\u00B0f");
+            tempEL.text("Temp: "+forcast.temp.day+"\u00B0f");
             let humidityEl = $("<div class=\"mb-2\">");
-            humidityEl.text("Humidity: "+forcast.main.humidity+"%");
+            humidityEl.text("Humidity: "+forcast.humidity+"%");
             forcastContainerEl.append(dateEL,iconEl,tempEL,humidityEl);
             forcastDisplay.append(forcastContainerEl);
-            increment++;
         });
-    }
-    function formatDate(date){
-        if(parseInt(date[2]) < 10){
-            date[2] = "0"+date[2];
-        };
-        let formatedDate = date[0] + "-" + date[1] + "-" + date[2];
-        return formatedDate;
     }
 
     function addRecentSearch(city){
@@ -161,7 +160,6 @@ $(document).ready(function(){
             cityButton.text(city);
             cityButton.on("click",function(){
                 getWeather($(this).data("city"));
-                getForcast($(this).data("city"))
             })
             recentSearchEL.append(cityButton);
         });
@@ -174,12 +172,6 @@ $(document).ready(function(){
             errorDisplay.addClass("hidden");
             clearTimeout(errorTimer);
         },4000);
-    }
-
-    if(recentCitySearches.length != 0){
-        updateRecentSearch();
-        getWeather(recentCitySearches[0]);
-        getForcast(recentCitySearches[0]);
     }
 });
 
